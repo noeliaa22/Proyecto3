@@ -27,6 +27,7 @@ namespace Viajes.Models
         public double? ValoracionMedia { get; set; }
         public int CantidadValoraciones { get; set; }
         public Ciudad Ciudad { get; set; }
+        public int CiudadId { get; set; }
         public AppUser Usuario { get; set; }
     }
 }

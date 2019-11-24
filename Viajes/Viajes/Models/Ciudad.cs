@@ -16,6 +16,7 @@ namespace Viajes.Models
         public string Imagen { get; set; }
         public string Video { get; set; }
         public Pais Pais { get; set; }
+        public int PaisId { get; set; }
         public List<Plan> Planes { get; set; }
     }
 }

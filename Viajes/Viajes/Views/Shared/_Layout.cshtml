@@ -8,10 +8,17 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header id="cabeceraComun">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Paises" asp-action="Index">Viajes</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Paises" asp-action="Index">
+                    <div class="row">
+                        <img src="https://i.pinimg.com/originals/10/a1/a2/10a1a2f65b58b827756ad4577da0656c.png" id="logotipo" />
+                        <div class="logotexto">
+                            <p>MONARCH <br />PLANNER</p>
+                        </div>
+                    </div>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,11 +27,14 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Planes" asp-action="Index">Descubre</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @*<li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </li>*@
                     </ul>
                 </div>
             </div>
@@ -32,6 +42,12 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div id="mySidenav" class="sidenav">
+                <a href="#" id="about">About</a>
+                <a href="#" id="blog">Blog</a>
+                <a href="#" id="projects">Projects</a>
+                <a href="#" id="contact">Contact</a>
+            </div>
             @RenderBody()
         </main>
     </div>

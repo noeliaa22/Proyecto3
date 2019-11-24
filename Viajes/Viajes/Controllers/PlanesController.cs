@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Viajes.Data;
 using Viajes.Models;
+using Viajes.Models.ViewModels;
 using Viajes.Services;
 
 namespace Viajes.Controllers
@@ -14,16 +15,28 @@ namespace Viajes.Controllers
     public class PlanesController : Controller
     {
         private readonly IPlanes _planesServices;
+        private readonly ICiudades _ciudadesServices;
 
-        public PlanesController(IPlanes planesServices)
+        public PlanesController(IPlanes planesServices, ICiudades ciudadesServices)
         {
             _planesServices = planesServices;
+            _ciudadesServices = ciudadesServices;
         }
 
         // GET: Planes
         public async Task<IActionResult> Index()
         {
             return View(await _planesServices.GetPlanesAsync());
+        }
+
+        public async Task<IActionResult> CityPlan(int ciudadId)
+        {
+            ListaPlanPorCiudadVM lppcvm = new ListaPlanPorCiudadVM
+            {
+                Ciudad = await _ciudadesServices.GetCiudadByIdAsync(ciudadId),
+                Planes = await _planesServices.GetPlanesByCiudadIdAsync(ciudadId)
+            };
+            return View(lppcvm);
         }
 
         // GET: Planes/Details/5

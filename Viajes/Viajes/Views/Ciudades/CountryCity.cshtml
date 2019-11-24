@@ -1,0 +1,78 @@
+﻿@model Viajes.Models.ViewModels.ListaCiudadPorPaisVM
+
+
+
+<div class="card bg-transparent border-0 text-white m-3" style="width:100%;">
+    <img src="@Model.Pais.Imagen" class="card-img" style="height:400px;width:auto; object-fit: none;" alt="@Model.Pais.Nombre">
+    <div class="card-img-overlay text-center">
+        <h1 class="card-title text-center paisCiudades">@Model.Pais.Nombre.ToUpper()</h1>
+        <ul class="row justify-content-center actividadesCiudades">
+            <li>Naturaleza </li>
+            <li> Cultura </li>
+            <li> Deporte </li>
+        </ul>
+    </div>
+</div>
+
+
+<div> </div>
+
+
+
+<div class="row align-content-center">
+
+    @foreach (Ciudad ciudad in Model.Ciudades)
+    {
+        <div class="card bg-transparent border-0 text-white col-lg-4 col-md-6 col-sm-12 cardCity ">
+                <img src="@ciudad.Video" class="card-img" alt="@ciudad.Nombre">
+            <div class="card-img-overlay">
+            <a asp-controller="Planes" asp-action="CityPlan" asp-route-ciudadId="@ciudad.Id">
+                <h5 class="card-title text-white">@ciudad.Nombre</h5>
+            </a>
+            </div>
+        </div>
+    }
+</div>
+
+
+@*<h1>CountryCity</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                   Nombre
+                </th>
+                <th>
+                   Imagen
+                </th>
+                <th>
+                   Video
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model.Ciudades) {
+            <tr>
+                <td>
+                    @item.Nombre
+                </td>
+                <td>
+                    @item.Imagen
+                </td>
+                <td>
+                    @item.Video
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

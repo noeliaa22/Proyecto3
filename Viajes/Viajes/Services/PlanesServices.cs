@@ -17,6 +17,11 @@ namespace Viajes.Services
             _context = context;
         }
 
+        public async Task<List<Plan>> GetPlanesByCiudadIdAsync(int ciudadId)
+        {
+            return await _context.Planes.Where(x => x.CiudadId == ciudadId).ToListAsync();
+        }
+
         public async Task CreatePlanAsync(Plan plan)
         {
             await _context.AddAsync(plan);

@@ -7,23 +7,38 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Viajes.Data;
 using Viajes.Models;
+using Viajes.Models.ViewModels;
+using Viajes.Services;
 
 namespace Viajes.Controllers
 {
     public class CiudadesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICiudades _ciudadesServices;
+        private readonly IPaises _paisesServices;
 
-        public CiudadesController(ApplicationDbContext context)
+        public CiudadesController(ICiudades ciudadesServices, IPaises paisesServices)
         {
-            _context = context;
+            _ciudadesServices = ciudadesServices;
+            _paisesServices = paisesServices;
         }
 
         // GET: Ciudades
         public async Task<IActionResult> Index()
-        {
-            return View(await _context.Ciudades.ToListAsync());
+        {       
+            return View(await _ciudadesServices.GetCiudadesAsync());
         }
+
+        public async Task<IActionResult> CountryCity(int paisId)
+        {
+            ListaCiudadPorPaisVM lcppvm = new ListaCiudadPorPaisVM
+            {
+                Pais = await _paisesServices.GetPaisByIdAsync(paisId),
+                Ciudades = await _ciudadesServices.GetCiudadesByPaisIdAsync(paisId)
+            };
+            return View(lcppvm);
+        }
+
 
         // GET: Ciudades/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -33,8 +48,7 @@ namespace Viajes.Controllers
                 return NotFound();
             }
 
-            var ciudad = await _context.Ciudades
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var ciudad = await _ciudadesServices.GetCiudadByIdAsync(id);
             if (ciudad == null)
             {
                 return NotFound();
@@ -54,12 +68,11 @@ namespace Viajes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Imagen,Video")] Ciudad ciudad)
+        public async Task<IActionResult> Create([Bind("Id,Tipo,Nombre,Descripcion,Imagen,Revisado,FechaPublicacion,ValoracionMedia,CantidadValoraciones")] Ciudad ciudad)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ciudad);
-                await _context.SaveChangesAsync();
+                await _ciudadesServices.CreateCiudadAsync(ciudad);
                 return RedirectToAction(nameof(Index));
             }
             return View(ciudad);
@@ -73,7 +86,7 @@ namespace Viajes.Controllers
                 return NotFound();
             }
 
-            var ciudad = await _context.Ciudades.FindAsync(id);
+            var ciudad = await _ciudadesServices.GetCiudadByIdAsync(id);
             if (ciudad == null)
             {
                 return NotFound();
@@ -86,7 +99,7 @@ namespace Viajes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Imagen,Video")] Ciudad ciudad)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Tipo,Nombre,Descripcion,Imagen,Revisado,FechaPublicacion,ValoracionMedia,CantidadValoraciones")] Ciudad ciudad)
         {
             if (id != ciudad.Id)
             {
@@ -97,12 +110,11 @@ namespace Viajes.Controllers
             {
                 try
                 {
-                    _context.Update(ciudad);
-                    await _context.SaveChangesAsync();
+                    await _ciudadesServices.UpdateCiudadAsync(ciudad);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CiudadExists(ciudad.Id))
+                    if (!_ciudadesServices.CiudadExists(ciudad.Id))
                     {
                         return NotFound();
                     }
@@ -124,8 +136,7 @@ namespace Viajes.Controllers
                 return NotFound();
             }
 
-            var ciudad = await _context.Ciudades
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var ciudad = await _ciudadesServices.GetCiudadByIdAsync(id);
             if (ciudad == null)
             {
                 return NotFound();
@@ -139,15 +150,14 @@ namespace Viajes.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ciudad = await _context.Ciudades.FindAsync(id);
-            _context.Ciudades.Remove(ciudad);
-            await _context.SaveChangesAsync();
+            var ciudad = await _ciudadesServices.GetCiudadByIdAsync(id);
+            await _ciudadesServices.DeleteCiudadAsync(ciudad);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CiudadExists(int id)
-        {
-            return _context.Ciudades.Any(e => e.Id == id);
-        }
+        //private bool CiudadExists(int id)
+        //{
+        //    return _context.Ciudades.Any(e => e.Id == id);
+        //}
     }
 }
