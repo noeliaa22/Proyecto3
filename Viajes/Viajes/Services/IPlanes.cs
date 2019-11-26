@@ -8,6 +8,7 @@ namespace Viajes.Services
 {
     public interface IPlanes
     {
+        public List<string> GetFechas();
         public List<string> GetTipos();
         public Task<List<Plan>> GetPlanesByCiudadyTipoAsync(string ciudad, string tipo);
         public Task<List<Plan>> GetPlanesByCiudadIdAsync(int ciudadId);

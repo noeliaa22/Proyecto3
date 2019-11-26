@@ -1,0 +1,121 @@
+﻿@model Viajes.Models.ViewModels.ListaPlanPorCiudadVM
+<script src="https://kit.fontawesome.com/fae805ac08.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<h1 class="text-center encabezado">ACTIVIDAD</h1>
+
+<div class="text-center">
+    <button class="botonDescubre m-4" type="button" data-toggle="collapse" data-target="#collapseExample-1" aria-expanded="false" aria-controls="collapseExample-1">
+        Revisar planes
+    </button>
+    <button class="botonDescubre m-4" type="button" data-toggle="collapse" data-target="#collapseExample-2" aria-expanded="false" aria-controls="collapseExample-2">
+        Estadísticas
+    </button>
+</div>
+
+<div class="collapse d-flex align-items-end flex-column w-85" id="collapseExample-1">
+    @{
+        int cont = 0;
+        foreach (Plan plan in Model.Planes)
+        {
+            if (plan.Revisado == false)
+            {
+                cont++;
+                <div class="media planes collapse" id="collapseExample-1">
+                    <img src="@plan.Imagen" class="mr-3 planImagen" alt="@plan.Nombre">
+                    <div class="media-body">
+                        <h5 class="mt-0">@plan.Nombre</h5>
+                        @plan.Descripcion
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">@plan.Ciudad.Nombre, @plan.Ciudad.Pais.Nombre</li>
+                            <li class="list-group-item">Tipo: @plan.Tipo</li>
+                            <li class="list-group-item">Usuario: @plan.Usuario.NombreUsuario (@plan.UsuarioId)</li>
+                            <li class="list-group-item">Fecha: @plan.FechaPublicacion</li>
+                        </ul>
+                        <div class="card-body">
+                            <button class="botonDescubre" type="button" data-toggle="collapse" data-target="#collapseExample-@plan.Id" aria-expanded="false" aria-controls="collapseExample-@plan.Id">
+                                <i class="far fa-check-square fa-2x"></i>
+                            </button>
+                            <a class="collapse card-link" id="collapseExample-@plan.Id" asp-action="AprobarPlan" asp-route-planId="@plan.Id">Confirmar</a>
+                            <button class="botonDescubre" type="button" data-toggle="collapse" data-target="#collapseExample-2-@plan.Id" aria-expanded="false" aria-controls="collapseExample-2-@plan.Id">
+                                <i class="far fa-trash-alt fa-2x"></i>
+                            </button>
+                            <a class="collapse card-link" id="collapseExample-2-@plan.Id" asp-action="Delete" asp-route-id="@plan.Id">Borrar</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+        if (cont == 0)
+        {
+            <p class="texto collapse" id="collapseExample-1">No tienes ningún plan para revisar</p>
+        }
+    }
+
+
+</div>
+
+
+<script type="text/javascript">
+    var fechas = [];
+    var numPlanesDia = [];
+</script>
+<script type="text/javascript">
+    var tipos = [];
+    var numPlanesTipo = [];
+</script>
+
+<div class="collapse cajaGrafico" id="collapseExample-2">
+
+    @foreach (string fecha in Model.FechasPlan)
+    {
+        <script type="text/javascript">
+                 fechas.push('@fecha');
+        </script>
+        int numplan = 0;
+        foreach (Plan plan in Model.Planes)
+        {
+            if (fecha == plan.FechaPublicacion.ToString().Substring(0, 10))
+            {
+
+                numplan++;
+            }
+        }
+        <script type="text/javascript">
+                numPlanesDia.push(@numplan);
+        </script>
+    }
+
+    @foreach (string tipo in Model.TiposPlan)
+    {
+        <script type="text/javascript">
+                 tipos.push('@tipo');
+        </script>
+        int numplantipo = 0;
+        foreach (Plan plan in Model.Planes)
+        {
+            if (tipo == plan.Tipo)
+            {
+
+                numplantipo++;
+            }
+        }
+        <script type="text/javascript">
+                numPlanesTipo.push(@numplantipo);
+        </script>
+    }
+
+    <div id="resultado">
+        <div class="rdo"></div>
+        <div class="cajaGrafico">
+            <canvas id="myCanvas"></canvas>
+        </div>
+        <div class="rdo"></div>
+        <div class="cajaGrafico">
+            <canvas id="myDoughnutChart"></canvas>
+        </div>
+    </div>
+
+</div>
+

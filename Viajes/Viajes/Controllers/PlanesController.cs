@@ -39,7 +39,7 @@ namespace Viajes.Controllers
                 Paises = await _paisesServices.GetPaisesAsync(),
                 PaisContinente = _paisesServices.GetContinentes(),
                 TiposPlan = _planesServices.GetTipos(),
-                Planes = await _planesServices.GetPlanesByCiudadyTipoAsync(ciudad,tipo)
+                Planes = await _planesServices.GetPlanesByCiudadyTipoAsync(ciudad, tipo)
                 //Ciudades = await _ciudadesServices.GetCiudadesByPaisIdAsync(paisId)
             };
             return View(lppcvm);
@@ -72,6 +72,30 @@ namespace Viajes.Controllers
             return View(plan);
         }
         
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Actividad()
+        {
+
+            ListaPlanPorCiudadVM lppcvm = new ListaPlanPorCiudadVM
+            {
+                Planes = await _planesServices.GetPlanesAsync(),
+                FechasPlan = _planesServices.GetFechas(),
+                TiposPlan=_planesServices.GetTipos(),
+
+            };
+            return View(lppcvm);
+        }
+       
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AprobarPlan(int planId)
+        {
+            Plan plan = await _planesServices.GetPlanByIdAsync(planId);
+            plan.Revisado = true;
+            await _planesServices.UpdatePlanAsync(plan);
+            return Redirect("Actividad");
+        }
+
+
         [Authorize]
         public async Task<IActionResult> CrearPlan(int ciudadId)
         {
@@ -84,11 +108,11 @@ namespace Viajes.Controllers
                 Descripcion = "",
                 Imagen = "",
                 Ciudad = ciudad,
-                UsuarioId =user.Id,
+                UsuarioId = user.Id,
 
-                FechaPublicacion=DateTime.Now,
-                ValoracionMedia=0,
-                CantidadValoraciones=0,               
+                FechaPublicacion = DateTime.Now,
+                ValoracionMedia = 0,
+                CantidadValoraciones = 0,
             };
 
             if (await _userManager.IsInRoleAsync(user, "Admin"))

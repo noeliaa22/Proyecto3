@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model Viajes.Models.ViewModels.ListaPlanPorCiudadVM
 @inject UserManager<AppUser> _userManager
+<script src="https://kit.fontawesome.com/fae805ac08.js" crossorigin="anonymous"></script>
 
 
 <h1 class="text-center encabezado">DESCUBRE PLANES POR TODO EL MUNDO</h1>
@@ -19,7 +20,7 @@
                 };
             }
         </select>
-        <input type="submit" class="botonDescubre" value="Filtrar" />
+        <button type="submit" class="botonDescubre" value=""><i class="fas fa-filter fa-x2"></i></button>
     </form>
 </div>
 
@@ -44,12 +45,12 @@ else
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">@plan.Ciudad.Nombre, @plan.Ciudad.Pais.Nombre</li>
                             <li class="list-group-item">Tipo: @plan.Tipo</li>
-                            <li class="list-group-item">@plan.CantidadValoraciones valoraciones: @plan.ValoracionMedia valoracion media</li>
+                            <li class="list-group-item">@plan.CantidadValoraciones valoraciones: @plan.ValoracionMedia valoración media</li>
                         </ul>
                         <div class="card-body">
                             <a class="card-link" data-toggle="collapse" href="#collapseExample-@plan.Id" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Valora este plan
-                            </a>    
+                            </a>
                             <a class="card-link" asp-action="Edit" asp-route-id="@plan.Id">Editar plan</a>
                             <a class="card-link" asp-action="Delete" asp-route-id="@plan.Id">Eliminar plan</a>
                         </div>

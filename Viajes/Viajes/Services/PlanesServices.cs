@@ -36,6 +36,11 @@ namespace Viajes.Services
             return planes;
         }
 
+        public List<string> GetFechas()
+        {
+            List<Plan> planes = _context.Planes.Where(x=>x.FechaPublicacion > DateTime.Today.AddDays(-7)).ToList();
+            return planes.Select(x => x.FechaPublicacion.ToString().Substring(0,10)).Distinct().ToList();
+        }
 
 
         public List<string> GetTipos()
@@ -72,7 +77,7 @@ namespace Viajes.Services
 
         public async Task<List<Plan>> GetPlanesAsync()
         {
-            return await _context.Planes.ToListAsync();
+            return await _context.Planes.Include(x=>x.Usuario).Include(x => x.Ciudad).ThenInclude(y => y.Pais).ToListAsync();
         }
 
         public async Task UpdatePlanAsync(Plan plan)

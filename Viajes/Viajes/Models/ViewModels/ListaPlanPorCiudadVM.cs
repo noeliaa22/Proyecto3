@@ -15,5 +15,6 @@ namespace Viajes.Models.ViewModels
         public List<Pais> Paises { get; set; }
         public List<string> PaisContinente { get; set; }
         public List<string> TiposPlan { get; set; }
+        public List<string> FechasPlan { get; set; }
     }
 }

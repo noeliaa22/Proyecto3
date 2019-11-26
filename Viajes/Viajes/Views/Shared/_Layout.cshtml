@@ -61,8 +61,7 @@
                     AppUser user = await _userManager.GetUserAsync(User);
                     @if (await _userManager.IsInRoleAsync(user, "Admin"))
                     {
-                        <a href="#" id="contact">Áctividad &nbsp; <i class="fas fa-chart-line"></i></a>
-
+                        <a asp-area="" asp-controller="Planes" asp-action="Actividad" id="contact">Áctividad &nbsp; <i class="fas fa-chart-line"></i></a>
                     }
                 }
             </div>
