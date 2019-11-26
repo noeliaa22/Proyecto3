@@ -12,7 +12,7 @@
         int cont = 1;
         <h3 class="text-center subencabezado">@continente.ToUpper()</h3>
 
-        <div id="carouselExampleFade" class="carousel slide carousel-fade paisCar" data-interval="2500" data-ride="carousel">
+        <div class="carousel slide carousel-fade paisCar" id="carouselExampleFade-@continente" data-interval="2000" data-ride="carousel">
             <div class="carousel-inner">
                 @foreach (var pais in Model.Paises)
                 {
@@ -41,17 +41,17 @@
                         </div>
                     }
                 }
-
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#carouselExampleFade-@continente" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#carouselExampleFade-@continente" role="button" data-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
         </div>
+
     }
 </div>
 

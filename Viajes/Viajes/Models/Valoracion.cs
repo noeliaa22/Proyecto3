@@ -11,6 +11,8 @@ namespace Viajes.Models
         public DateTime Fecha { get; set; }
         public int Puntuacion { get; set; }
         public Plan Plan { get; set; }
+        public int PlanId { get; set; }
         public AppUser Usuario { get; set; }
+        public string UsuarioId { get; set; }
     }
 }

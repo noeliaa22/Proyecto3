@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> _signInManager
+@inject UserManager<AppUser> _userManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,6 +10,7 @@
     <title>@ViewData["Title"] - Viajes</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/fae805ac08.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header id="cabeceraComun">
@@ -26,15 +31,15 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Planes" asp-action="Index">Descubre</a>
-                        </li>
                         @*<li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </li>*@
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Planes" asp-action="Index">Descubre</a>
+                            </li>*@
+                        @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>*@
                     </ul>
                 </div>
             </div>
@@ -43,10 +48,23 @@
     <div class="container">
         <main role="main" class="pb-3">
             <div id="mySidenav" class="sidenav">
-                <a href="#" id="about">About</a>
-                <a href="#" id="blog">Blog</a>
-                <a href="#" id="projects">Projects</a>
-                <a href="#" id="contact">Contact</a>
+
+                <a asp-area="" asp-controller="Planes" asp-action="Index" id="about">Descubre &nbsp; <i class="fab fa-telegram-plane"></i></a>
+
+                @if (_signInManager.IsSignedIn(User))
+                {
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" id="blog">Mi perfil &nbsp;&nbsp; <i class="fa fa-user" aria-hidden="true"></i></a>
+                    <a href="#" id="projects">Mis guías &nbsp; <i class="fas fa-clipboard-list"></i></a>
+                }
+                @if (_signInManager.IsSignedIn(User))
+                {
+                    AppUser user = await _userManager.GetUserAsync(User);
+                    @if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        <a href="#" id="contact">Áctividad &nbsp; <i class="fas fa-chart-line"></i></a>
+
+                    }
+                }
             </div>
             @RenderBody()
         </main>

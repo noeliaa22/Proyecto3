@@ -24,10 +24,11 @@ namespace Viajes.Models
         [Required]
         public bool Revisado { get; set; }
         public DateTime? FechaPublicacion { get; set; } //Se añade cuando Revisado está en modo True
-        public double? ValoracionMedia { get; set; }
+        public double ValoracionMedia { get; set; }
         public int CantidadValoraciones { get; set; }
         public Ciudad Ciudad { get; set; }
         public int CiudadId { get; set; }
         public AppUser Usuario { get; set; }
+        public string UsuarioId { get; set; }
     }
 }

@@ -16,6 +16,32 @@ namespace Viajes.Services
         {
             _context = context;
         }
+        public async Task<List<Plan>> GetPlanesByCiudadyTipoAsync(string ciudad, string tipo)
+        {
+            List<Plan> planes = await _context.Planes.Include(x => x.Ciudad).ThenInclude(y => y.Pais).OrderBy(x=>x.Nombre).ToListAsync();
+
+            if (String.IsNullOrEmpty(ciudad) && String.IsNullOrEmpty(tipo))
+            {
+                return planes;
+            }
+
+            if (!String.IsNullOrEmpty(ciudad))
+            {
+                planes= planes.Where(x => x.Ciudad.Nombre.ToLower().Contains(ciudad.ToLower())).ToList();
+            }
+            if (!String.IsNullOrEmpty(tipo))
+            {
+                planes = planes.Where(x => x.Tipo == tipo).ToList();
+            }
+            return planes;
+        }
+
+
+
+        public List<string> GetTipos()
+        {
+            return _context.Planes.Select(x => x.Tipo).Distinct().ToList();
+        }
 
         public async Task<List<Plan>> GetPlanesByCiudadIdAsync(int ciudadId)
         {
@@ -24,6 +50,10 @@ namespace Viajes.Services
 
         public async Task CreatePlanAsync(Plan plan)
         {
+            //plan.FechaPublicacion = DateTime.Now;
+            //plan.Revisado = false;
+            //plan.CantidadValoraciones = 0;
+            //plan.ValoracionMedia = 0;
             await _context.AddAsync(plan);
 
             await _context.SaveChangesAsync();
@@ -42,7 +72,7 @@ namespace Viajes.Services
 
         public async Task<List<Plan>> GetPlanesAsync()
         {
-            return await _context.Planes.ToListAsync(); ;
+            return await _context.Planes.ToListAsync();
         }
 
         public async Task UpdatePlanAsync(Plan plan)

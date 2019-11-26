@@ -165,6 +165,12 @@ body {
         margin-left: 4%;
     }
 
+.cardCity{
+    margin-bottom:3%;
+    margin-top:3%;
+    margin-left:1%;
+}
+
 .cardCity:hover {
     transform: scale(1.1);
     box-shadow: 10px 6px 50px 5px;
@@ -178,6 +184,22 @@ body {
     right:0;*/
     width: 90%;
 }
+
+.filtros{
+    margin:4%;
+}
+
+.botonDescubre {
+    background-color: transparent;
+    color: darkblue;
+    font-family: Book Antiqua;
+    border: 2px solid darkblue;
+    border-radius:10%;
+}
+    .botonDescubre:hover {
+        box-shadow: 0 12px 16px 0 #d0a773, 0 17px 50px 0 #d0a773;
+    }
+
 
 
 
@@ -194,7 +216,7 @@ body {
 
 @media screen and (min-width: 800px) {
     #mySidenav a {
-        left: -5%; /* Position them outside of the screen */
+        left: -6%; /* Position them outside of the screen */
         width: 10%; /* Set a specific width */
         padding: 10px; /* 15px padding */
         font-size: 100%; /* Increase font size */

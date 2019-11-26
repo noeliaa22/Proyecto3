@@ -27,31 +27,33 @@
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Imagen" class="control-label"></label>
-                <input asp-for="Imagen" class="form-control" />
-                <span asp-validation-for="Imagen" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Revisado" /> @Html.DisplayNameFor(model => model.Revisado)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaPublicacion" class="control-label"></label>
-                <input asp-for="FechaPublicacion" class="form-control" />
-                <span asp-validation-for="FechaPublicacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ValoracionMedia" class="control-label"></label>
-                <input asp-for="ValoracionMedia" class="form-control" />
-                <span asp-validation-for="ValoracionMedia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CantidadValoraciones" class="control-label"></label>
-                <input asp-for="CantidadValoraciones" class="form-control" />
-                <span asp-validation-for="CantidadValoraciones" class="text-danger"></span>
-            </div>
+            @*<input type="hidden" value="@Model.CiudadId" asp-for="EntranteId" />*@
+
+            @*<div class="form-group">
+            <label asp-for="Imagen" class="control-label"></label>
+            <input asp-for="Imagen" class="form-control" />
+            <span asp-validation-for="Imagen" class="text-danger"></span>
+        </div>*@
+            @*<div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Revisado" /> @Html.DisplayNameFor(model => model.Revisado)
+            </label>
+        </div>*@
+            @*<div class="form-group">
+            <label asp-for="FechaPublicacion" class="control-label"></label>
+            <input asp-for="FechaPublicacion" class="form-control" />
+            <span asp-validation-for="FechaPublicacion" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ValoracionMedia" class="control-label"></label>
+            <input asp-for="ValoracionMedia" class="form-control" />
+            <span asp-validation-for="ValoracionMedia" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CantidadValoraciones" class="control-label"></label>
+            <input asp-for="CantidadValoraciones" class="form-control" />
+            <span asp-validation-for="CantidadValoraciones" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

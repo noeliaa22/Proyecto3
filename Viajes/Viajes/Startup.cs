@@ -40,6 +40,7 @@ namespace Viajes
             services.AddTransient<IPlanes, PlanesServices>();
             services.AddTransient<IPaises, PaisesServices>();
             services.AddTransient<ICiudades, CiudadesServices>();
+            services.AddTransient<IValoraciones, ValoracionesServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

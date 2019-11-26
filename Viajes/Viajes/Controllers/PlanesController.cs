@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Viajes.Data;
 using Viajes.Models;
 using Viajes.Models.ViewModels;
@@ -16,17 +19,30 @@ namespace Viajes.Controllers
     {
         private readonly IPlanes _planesServices;
         private readonly ICiudades _ciudadesServices;
+        private readonly IPaises _paisesServices;
+        private readonly UserManager<AppUser> _userManager;
 
-        public PlanesController(IPlanes planesServices, ICiudades ciudadesServices)
+        public PlanesController(IPlanes planesServices, ICiudades ciudadesServices, IPaises paisesServices, UserManager<AppUser> userManager)
         {
             _planesServices = planesServices;
             _ciudadesServices = ciudadesServices;
+            _paisesServices = paisesServices;
+            _userManager = userManager;
         }
 
         // GET: Planes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string ciudad, string tipo)
         {
-            return View(await _planesServices.GetPlanesAsync());
+
+            ListaPlanPorCiudadVM lppcvm = new ListaPlanPorCiudadVM
+            {
+                Paises = await _paisesServices.GetPaisesAsync(),
+                PaisContinente = _paisesServices.GetContinentes(),
+                TiposPlan = _planesServices.GetTipos(),
+                Planes = await _planesServices.GetPlanesByCiudadyTipoAsync(ciudad,tipo)
+                //Ciudades = await _ciudadesServices.GetCiudadesByPaisIdAsync(paisId)
+            };
+            return View(lppcvm);
         }
 
         public async Task<IActionResult> CityPlan(int ciudadId)
@@ -55,8 +71,48 @@ namespace Viajes.Controllers
 
             return View(plan);
         }
+        
+        [Authorize]
+        public async Task<IActionResult> CrearPlan(int ciudadId)
+        {
+            Ciudad ciudad = await _ciudadesServices.GetCiudadByIdAsync(ciudadId);
+            AppUser user = await _userManager.GetUserAsync(User);
+            Plan nuevoPlan = new Plan
+            {
+                Tipo = "",
+                Nombre = "",
+                Descripcion = "",
+                Imagen = "",
+                Ciudad = ciudad,
+                UsuarioId =user.Id,
+
+                FechaPublicacion=DateTime.Now,
+                ValoracionMedia=0,
+                CantidadValoraciones=0,               
+            };
+
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                nuevoPlan.Revisado = true;
+            }
+            else
+            {
+                nuevoPlan.Revisado = false;
+            }
+
+            return View(nuevoPlan);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmarPlan([Bind("Tipo,Nombre,Descripcion,Imagen,Revisado,FechaPublicacion,ValoracionMedia,CantidadValoraciones,CiudadId,UsuarioId")]Plan plan)
+        {
+            await _planesServices.CreatePlanAsync(plan);
+
+            return RedirectToAction("CityPlan", new { ciudadId = plan.CiudadId });
+        }
+
 
         // GET: Planes/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -78,6 +134,7 @@ namespace Viajes.Controllers
         }
 
         // GET: Planes/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,6 +185,7 @@ namespace Viajes.Controllers
         }
 
         // GET: Planes/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

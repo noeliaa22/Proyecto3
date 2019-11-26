@@ -92,7 +92,7 @@ namespace Viajes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Tipo,Nombre,Descripcion,Imagen,Revisado,FechaPublicacion,ValoracionMedia,CantidadValoraciones")] Pais pais)
+        public async Task<IActionResult> Edit(int id,[Bind("Id,Tipo,Nombre,Imagen,Revisado,FechaPublicacion,ValoracionMedia,CantidadValoraciones")] Pais pais)
         {
             if (id != pais.Id)
             {

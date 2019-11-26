@@ -1,4 +1,6 @@
-﻿@model Viajes.Models.ViewModels.ListaPlanPorCiudadVM
+﻿@using Microsoft.AspNetCore.Identity
+@model Viajes.Models.ViewModels.ListaPlanPorCiudadVM
+@inject UserManager<AppUser> _userManager
 
 
 <div class="card bg-transparent border-0 text-white m-3" style="width:100%;">
@@ -8,55 +10,74 @@
         <ul class="row justify-content-center actividadesCiudades">
             <li>Naturaleza </li>
             <li> Cultura </li>
-            <li> Deporte </li>
+            <li> Ocio </li>
         </ul>
     </div>
 </div>
 
-<p>
-    <a asp-action="Create">Crea tu plan</a>
-</p>
+<div class="text-center">
+    <a asp-controller="Planes" asp-action="CrearPlan" asp-route-ciudadId="@Model.Ciudad.Id">Crear Plan</a>
+</div>
 
 <div class="d-flex align-items-end flex-column w-85">
 
     @foreach (Plan plan in Model.Planes)
     {
-        <div class="media planes">
-            <img src="@plan.Imagen" class="mr-3 planImagen" alt="@plan.Nombre">
-            <div class="media-body">
-                <h5 class="mt-0">@plan.Nombre</h5>
-                @plan.Descripcion
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Tipo: @plan.Tipo</li>
-                    <li class="list-group-item">@plan.CantidadValoraciones valoraciones, @plan.ValoracionMedia valoracion media</li>
-                </ul>
-                <div class="card-body">
-                    <a class="card-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Valora este plan
-                    </a>
-                    <a class="card-link" asp-action="Edit" asp-route-id="@plan.Id">Editar plan</a>
-                    <a class="card-link" asp-action="Delete" asp-route-id="@plan.Id">Eliminar plan</a>
-                </div>
-                <div class="collapse" id="collapseExample">
-                    <div class="card card-body">
-                        <form asp-action="Valorar" asp-route-id="@plan.Id">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=1>
-                            <label class="form-check-label" for="exampleRadios1">1</label>
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=2>
-                            <label class="form-check-label" for="exampleRadios1">2</label>
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=3>
-                            <label class="form-check-label" for="exampleRadios1">3</label>
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=4>
-                            <label class="form-check-label" for="exampleRadios1">4</label>
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=5>
-                            <label class="form-check-label" for="exampleRadios1">5</label>
+        if (plan.Revisado == true)
+        {
+            <div class="media planes">
+                <img src="@plan.Imagen" class="mr-3 planImagen" alt="@plan.Nombre">
+                <div class="media-body">
+                    <h5 class="mt-0">@plan.Nombre</h5>
+                    @plan.Descripcion
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Tipo: @plan.Tipo</li>
+                        <li class="list-group-item">@plan.CantidadValoraciones valoraciones: @plan.ValoracionMedia valoracion media</li>
+                    </ul>
+                    <div class="card-body">
+                        <a class="card-link" data-toggle="collapse" href="#collapseExample-@plan.Id" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Valora este plan
+                        </a>
+                        <a class="card-link" asp-action="Edit" asp-route-id="@plan.Id">Editar plan</a>
+                        <a class="card-link" asp-action="Delete" asp-route-id="@plan.Id">Eliminar plan</a>
+                    </div>
+                    <div class="collapse" id="collapseExample-@plan.Id">
+                        <div class="card card-body">
 
-                            <input type="submit" value="¡Hecho!" />
-                        </form>                            
+                            @*@if (Model.Valoracion.UsuarioId == _userManager.GetUserId(User) && plan.Id==Model.Valoracion.PlanId)
+                            {
+
+                            }*@
+
+                            <form asp-controller="Valoraciones" asp-action="Valorar">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="inlineRadio1" asp-for="@Model.Valoracion.Puntuacion" value=1>
+                                    <label class="form-check-label" for="inlineRadio1">1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="inlineRadio2" asp-for="@Model.Valoracion.Puntuacion" value=2>
+                                    <label class="form-check-label" for="inlineRadio2">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="inlineRadio3" asp-for="@Model.Valoracion.Puntuacion" value=3>
+                                    <label class="form-check-label" for="inlineRadio3">3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="inlineRadio4" asp-for="@Model.Valoracion.Puntuacion" value=4>
+                                    <label class="form-check-label" for="inlineRadio4">4</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="inlineRadio5" asp-for="@Model.Valoracion.Puntuacion" value=5>
+                                    <label class="form-check-label" for="inlineRadio5">5</label>
+                                </div>
+                                <input type="hidden" asp-for="@Model.Valoracion.PlanId" value="@plan.Id" />
+                                <input type="submit" value="¡Hecho!" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
+        }
     }
 </div>
 
@@ -73,72 +94,72 @@
 
 
 
-        @*<p>
-                <a asp-action="Create">Create New</a>
-            </p>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Tipo)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Nombre)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Descripcion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Imagen)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Revisado)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FechaPublicacion)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ValoracionMedia)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CantidadValoraciones)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-            @foreach (var item in Model) {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Tipo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Nombre)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Descripcion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Imagen)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Revisado)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaPublicacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ValoracionMedia)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CantidadValoraciones)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
-            }
-                </tbody>
-            </table>*@
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Imagen)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Revisado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaPublicacion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ValoracionMedia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CantidadValoraciones)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Imagen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Revisado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaPublicacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValoracionMedia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CantidadValoraciones)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
